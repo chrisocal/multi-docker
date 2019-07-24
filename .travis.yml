@@ -18,7 +18,7 @@ after_success:
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # take those images and push them to dockerhub
-  - docker chrisocal/multi-client
-  - docker chrisocal/multi-nginx
-  - docker chrisocal/multi-server
-  - docker chrisocal/multi-worker
+  - docker push chrisocal/multi-client
+  - docker push chrisocal/multi-nginx
+  - docker push chrisocal/multi-server
+  - docker push chrisocal/multi-worker
