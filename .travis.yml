@@ -1,0 +1,24 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t chrisocal/react-test -f ./client/Dockerfile.dev ./client
+#  docker build my other project
+script:
+  # - docker run my other project
+  # -- -- coverage //exits with 0 or not 0 when testing
+  - docker run chrisocal/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t chrisocal/multi-client ./client
+  - docker build -t chrisocal/multi-nginx ./nginx
+  - docker build -t chrisocal/multi-server ./server
+  - docker build -t chrisocal/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # take those images and push them to dockerhub
+  - docker chrisocal/multi-client
+  - docker chrisocal/multi-nginx
+  - docker chrisocal/multi-server
+  - docker chrisocal/multi-worker
